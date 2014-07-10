@@ -1,0 +1,172 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, height=device-height">
+<title>Document sans titre</title>
+<link rel="stylesheet" type="text/css" href="jm/jquery.mobile-1.4.2.min.css">
+
+<link rel="stylesheet" type="text/css" href="css/mobilestyle.css">
+<link rel="stylesheet" type="text/css" href="jm/jquery.mobile.theme-1.4.2.min.css">
+<script src="jm/jquery-1.8.0.min.js"></script>
+
+<script src="jm/jquery.mobile-1.4.2.min.js"></script>
+<script src="jm/function.js"></script>
+<script language="javascript">
+$.mobile.page.prototype.options.addBackBtn = "True";
+$.mobile.page.prototype.options.backBtnText = "Retour";
+$.mobile.transitionFallbacks.slideout = "slide"
+$.mobile.defaultPageTransition ="slide"
+
+
+
+</script>
+
+</head>
+
+<body>
+<div data-role="page" class="ui-page" data-add-back-btn="true" data-dom-cache="true" data-rel="back" id="index" >
+	
+	<div id="apps-header" data-theme="b" data-role="header" data-position="fixed">  <h1> Actualités </h1> <div data-role="fieldcontain"> <input name="" id="searchinput1" placeholder="tapez votre recherche ici" value="" type="search"> </div> </div>
+	<div role="main" class="ui-content"  id="news">
+    	<div align="center"><img src="jm/images/ajax-loader.gif"></div>
+    </div>
+	<div data-role="footer" data-theme="b" data-position="fixed" data-id="foot">
+    	
+    <div data-role="navbar" class="nav-glyphish-example" data-grid="c">
+    <ul class="test1">
+        <li><a href="index.html" class="ui-btn-active  ui-state-persist" data-icon="info">Actualités</a></li>
+        <li><a href="#systeme"  data-prefetch="true" data-icon="arrow-u-r" >Syst. Aca</a></li>
+        <li><a href="#dossier" data-prefetch="true" data-icon="shop">Dossier</a></li>
+        <li><a href="#repertoire" data-prefetch="true" data-icon="user">Répertoire</a></li>
+       
+    </ul>
+    </div>
+</div>
+    
+    </div>
+
+	<div data-role="page" class="ui-page" data-add-back-btn="true" id="systeme" >
+	
+	<div id="apps-header" data-theme="b" data-role="header" data-position="fixed">  <h1> Système académique </h1><a id="btn-back" data-role="button" data-rel="back" data-transition="slide" data-icon="arrow-l" data-iconpos="left" class="ui-btn-left" > Retour </a>  </div>
+	<div role="main" class="ui-content">
+    <!-- Debut content-->	
+        
+  <div data-role="tabs" id="tabs">
+  <div data-role="navbar">
+    <ul>
+      <li><a href="#cambodge" >Cambodge</a></li>
+      <li><a href="#laos" >Laos</a></li>
+      <li><a href="#vanuatu">Vanuatu</a></li>
+      <li><a href="#viet" >Vietnam</a></li>
+    </ul>
+  </div>
+  <div id="cambodge" class="ui-body-d ui-content ">
+    <h2>Cambodge</h2>
+    Cambodge Cambodge Cambodge Cambodge Cambodge Cambodge Cambodge Cambodge Cambodge Cambodge Cambodge Cambodge Cambodge 
+    Cambodge Cambodge Cambodge Cambodge Cambodge Cambodge Cambodge Cambodge Cambodge 
+    Cambodge Cambodge Cambodge Cambodge 
+  </div>
+  <div id="laos">
+    <h2>Laos</h2>
+    Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos 
+    Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos 
+    Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos Laos 
+  </div>
+   <div id="vanuatu">
+    <h2>Vanuatu</h2>
+    Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu  Vanuatu 
+  </div>
+  <div id="viet">
+    <h2>Vietnam</h2>
+    Vietnam Vietnam Vietnam Vietnam Vietnam Vietnam Vietnam Vietnam Vietnam Vietnam Vietnam Vietnam Vietnam Vietnam Vietnam Vietnam Vietnam Vietnam 
+  </div>
+</div>
+</div><!-- fin conten-->
+        
+   
+	<div data-role="footer" data-theme="b" data-position="fixed" data-id="foot">
+    	
+    <div data-role="navbar" class="nav-glyphish-example" data-grid="c">
+    <ul class="test1">
+        <li><a href="#index" data-ajax="false" data-icon="info">Actualités</a></li>
+        <li><a href="#" data-icon="arrow-u-r"  data-prefetch="true" class="ui-btn-active ui-state-persist">Syst. Aca</a></li>
+        <li><a href="#dossier"   data-icon="shop">Dossier</a></li>
+         <li><a href="#repertoire"   data-icon="user">Répertoire</a></li>
+       
+    </ul>
+    </div>
+</div>
+    
+    </div>
+<div data-role="page" class="ui-page" data-add-back-btn="true" id="dossier" >
+	
+	<div id="apps-header" data-theme="b" data-role="header" data-position="fixed">  <h1>Dossier thématique </h1><a id="btn-back" data-role="button" data-rel="back" data-transition="slide" data-icon="arrow-l" data-iconpos="left" class="ui-btn-left" > Retour </a>  </div>
+	<div role="main" class="ui-content">
+    <!-- Debut content-->	
+        <h2> Dossier thématique</h2>
+ 
+</div><!-- fin conten-->
+        
+   
+	<div data-role="footer" data-theme="b" data-position="fixed" data-id="foot">
+    	
+    <div data-role="navbar" class="nav-glyphish-example" data-grid="c">
+    <ul class="test1">
+        <li><a href="#index" data-ajax="false" data-icon="info">Actualités</a></li>
+        <li><a href="#systeme" data-icon="arrow-u-r" class="">Syst. Aca</a></li>
+        <li><a href="#"  class="ui-btn-active ui-state-persist" data-icon="shop">Dossier</a></li>
+         <li><a href="#repertoire"   data-icon="user">Répertoire</a></li>
+       
+    </ul>
+    </div>
+</div>
+    
+    </div>
+    
+    <div data-role="page" class="ui-page" data-add-back-btn="true" id="repertoire" >
+	
+	<div id="apps-header" data-theme="b" data-role="header" data-position="fixed">  <h1>Repertoire </h1><a id="btn-back" data-role="button" data-rel="back" data-transition="slide" data-icon="arrow-l" data-iconpos="left" class="ui-btn-left" > Retour </a>  </div>
+	<div role="main" class="ui-content">
+    <!-- Debut content-->	
+        <h2> Repertoire</h2>
+ 
+</div><!-- fin conten-->
+        
+   
+	<div data-role="footer" data-theme="b" data-position="fixed" data-id="foot">
+    	
+    <div data-role="navbar" class="nav-glyphish-example" data-grid="c">
+    <ul class="test1">
+        <li><a href="#index" data-ajax="false" data-icon="info">Actualités</a></li>
+        <li><a href="#systeme"  data-prefetch="true" data-icon="arrow-u-r" class="">Syst. Aca</a></li>
+        <li><a href="#dossier"  data-prefetch="true" data-icon="shop">Dossier</a></li>
+         <li><a href="#"   data-prefetch="true" class="ui-btn-active ui-state-persist" data-icon="user">Répertoire</a></li>
+       
+    </ul>
+    </div>
+</div>
+    
+    </div>
+    <div data-role="page" class="" data-add-back-btn="true" data-dom-cache="true" data-rel="back" id="details" >
+	
+	<div id="apps-header" data-theme="b" data-role="header" data-position="fixed">  <h1> Site web source </h1><a id="btn-back" data-role="button" data-rel="back" data-transition="slide" data-icon="arrow-l" data-iconpos="left" class="ui-btn-left"  > Retour </a>  </div>
+	<div role="main" class="ui-content"  id="contenusite">
+    	<IFRAME id="frameId" src="" width="100%"  scrolling=auto frameborder=1 > </IFRAME>
+    </div>
+	<div data-role="footer" data-theme="b" data-position="fixed" data-id="foot">
+    	
+    <div data-role="navbar" class="nav-glyphish-example" data-grid="c">
+    <ul class="test1">
+        <li><a href="#index" class="" data-ajax="false" data-icon="info">Actualités</a></li>
+        <li><a href="#systeme"  data-icon="arrow-u-r" >Syst. Aca</a></li>
+        <li><a href="#dossier" data-prefetch="true" data-icon="shop">Dossier</a></li>
+        <li><a href="#repertoire" data-prefetch="true" data-icon="user">Répertoire</a></li>
+       
+    </ul>
+    </div>
+</div>
+    
+    </div>
+</body>
+</html>
