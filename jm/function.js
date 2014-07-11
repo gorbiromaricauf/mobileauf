@@ -14,18 +14,18 @@ $(function() {
 	});*/
 	//url = "https://cartographie.auf.org/etablissement/api/?etablissement__region__nom=Asie-Pacifique";
     //url += "&format=jsonp";
-	 url = "https://outils.vn.auf.org/news/api/?format=jsonp";
+	 url = "http://outils.vn.auf.org/news/api/?format=jsonp";
 	 $.ajax({
 				type: 'GET',
 				dataType: "jsonp",
 				url: url,
 				crossDomain: true,
 				success: function (responseData, textStatus, jqXHR) {			
-						alert('Fils');
+						
 						resultat ='<ul data-role="listview" data-inset="true">';
 						data = responseData.results;
 						for(i=0;i<responseData.results.length;i++ ){
-					 
+					 		
 							resultat+= '<li><a href="#details"  data-title="'+data[i].lien_vers_site+'" data-ajax="false"><img src="'+racine+data[i].images+'"> <h2>'+data[i].titre+'</h2><p>'+data[i].extrait_contenu+'</p></a> </li>';
 						
 						
