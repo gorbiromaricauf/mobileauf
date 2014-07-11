@@ -12,16 +12,17 @@ $(function() {
 	/*$("#frameId").load(function() {
     	$(this).height( viewport.height );
 	});*/
-	//url = "https://cartographie.auf.org/etablissement/api/?etablissement__region__nom=Asie-Pacifique";
-    //url += "&format=jsonp";
-	 url = "http://outils.vn.auf.org/news/api/?format=jsonp";
+	url = "https://cartographie.auf.org/etablissement/api/?etablissement__region__nom=Asie-Pacifique&etablissement__pays__code_iso3=VNM";
+    url += "&format=jsonp";
+	// url = "http://outils.vn.auf.org/news/api/?format=jsonp";
+	 alert(url);
 	 $.ajax({
 				type: 'GET',
 				dataType: "jsonp",
 				url: url,
 				crossDomain: true,
 				success: function (responseData, textStatus, jqXHR) {			
-						
+						alert('ok');
 						resultat ='<ul data-role="listview" data-inset="true">';
 						data = responseData.results;
 						for(i=0;i<responseData.results.length;i++ ){
