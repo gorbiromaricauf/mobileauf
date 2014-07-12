@@ -12,14 +12,8 @@ $(function() {
     height : $(window).height()
 	};
 	
-	/*$("#frameId").load(function() {
-    	$(this).height( viewport.height );
-	});*/
-	//url = "https://cartographie.auf.org/etablissement/api/?etablissement__region__nom=Asie-Pacifique&etablissement__pays__code_iso3=VNM";
-  //  url += "&format=jsonp";
+
 	 url = "http://outils.vn.auf.org/news/api/?format=jsonp";
-	 alert(url);
-	 alert($("#news").html());
 	 ajax();
 	
    $(document).on('click','#news ul li a', function () {
@@ -53,7 +47,7 @@ $(function() {
 		var prevpage = $(this).prev('div[data-role="page"]');
 		
 		if (prevpage.length > 0) {
-		$.mobile.changePage(prevpage, {transition: "slide",reverse: true}, true, true);
+		$.mobile.changePage(prevpage, {transition: "slide",reverse: true}, false, true);
 
 		}
 	});
@@ -71,7 +65,7 @@ function ajax(){
 				jsonp: 'callback', 
 				cache: false,
 				success: function (responseData, textStatus, jqXHR) {			
-						alert('ok');
+						
 						var resultat ='<ul data-role="listview" data-inset="true">';
 						var data = responseData.results;
 						for(i=0;i<data.length;i++ ){
