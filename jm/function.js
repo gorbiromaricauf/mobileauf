@@ -1,4 +1,7 @@
- 
+ $(document).bind("mobileinit", function () {
+           // $.support.cors = true; // force cross-site scripting (as of jQuery 1.5)
+            $.mobile.allowCrossDomainPages = true;
+        });
 $(function() {
 	//$.mobile.page.prototype.options.domCache = true;
 	//active = $.mobile.activePage.attr('id')+'.html';
@@ -12,35 +15,12 @@ $(function() {
 	/*$("#frameId").load(function() {
     	$(this).height( viewport.height );
 	});*/
-	url = "https://cartographie.auf.org/etablissement/api/?etablissement__region__nom=Asie-Pacifique&etablissement__pays__code_iso3=VNM";
-    url += "&format=jsonp";
-	// url = "http://outils.vn.auf.org/news/api/?format=jsonp";
+	//url = "https://cartographie.auf.org/etablissement/api/?etablissement__region__nom=Asie-Pacifique&etablissement__pays__code_iso3=VNM";
+  //  url += "&format=jsonp";
+	 url = "http://outils.vn.auf.org/news/api/?format=jsonp";
 	 alert(url);
-	 $.ajax({
-				type: 'GET',
-				dataType: "jsonp",
-				url: url,
-				crossDomain: true,
-				success: function (responseData, textStatus, jqXHR) {			
-						alert('ok');
-						resultat ='<ul data-role="listview" data-inset="true">';
-						data = responseData.results;
-						for(i=0;i<responseData.results.length;i++ ){
-					 		
-							resultat+= '<li><a href="#details"  data-title="'+data[i].lien_vers_site+'" data-ajax="false"><img src="'+racine+data[i].images+'"> <h2>'+data[i].titre+'</h2><p>'+data[i].extrait_contenu+'</p></a> </li>';
-						
-						
-						}
-							resultat+='</ul>';
-						// $("[data-role='listview']").html(resultat);
-						 $("#news").html(resultat).find("ul").listview();
-						
-				},
-				error: function (responseData, textStatus, errorThrown) {
-						
-					alert('POST failed.'+errorThrown);
-				}
-				});
+	 alert($("#news").html());
+	 ajax();
 	
    $(document).on('click','#news ul li a', function () {
            
@@ -82,3 +62,32 @@ $(function() {
 			
 	
 });
+function ajax(){
+	 $.ajax({
+				type: 'GET',
+				dataType: "jsonp",
+				url: url,
+				crossDomain: true,
+				jsonp: 'callback', 
+				cache: false,
+				success: function (responseData, textStatus, jqXHR) {			
+						alert('ok');
+						var resultat ='<ul data-role="listview" data-inset="true">';
+						var data = responseData.results;
+						for(i=0;i<data.length;i++ ){
+					 		
+							resultat+= '<li><a href="#"  data-title="'+data[i].lien_vers_site+'" data-ajax="false"><img src="'+racine+data[i].images+'"> <h2>'+data[i].titre+'</h2><p>'+data[i].extrait_contenu+'</p></a> </li>';
+						
+						
+						}
+							resultat+='</ul>';
+						// $("[data-role='listview']").html(resultat);
+						 $("#news").html(resultat).find("ul").listview();
+						
+				},
+				error: function (responseData, textStatus, errorThrown) {
+						
+					 alert('POST failed.'+errorThrown);
+				}
+				});
+}

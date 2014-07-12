@@ -19,4 +19,5 @@ Bureau Asie pacifique
 <gap:splash src="demarrage.png" />
 <gap:splash src="demarrage.png" gap:platform="android" gap:qualifier="port-xxhdpi" />
 <gap:splash src="paysage.png" gap:platform="android" gap:qualifier="land-xxhdpi" />
+<access origin="*" />
 </widget>
