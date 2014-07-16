@@ -5,16 +5,12 @@
 $(function() {
 	//$.mobile.page.prototype.options.domCache = true;
 	//active = $.mobile.activePage.attr('id')+'.html';
-	racine ="http://outils.vn.auf.org/media/";
-	
+	racine ="http://outils.vn.auf.org/media/";	
 	var viewport = {
     width  : $(window).width(),
     height : $(window).height()
 	};
-	
-
-	
-	 ajaxNews();
+	ajaxNews();
 	ajaxSA();
    $(document).on('click','#news ul li a', function () {
            
@@ -36,7 +32,7 @@ $(function() {
 		
         });   
 		   
-	$('div.ui-page').live("swipeleft", function(){
+/*	$('div.ui-page').live("swipeleft", function(){
 		var nextpage = $(this).next('div[data-role="page"]');
 		
 		if (nextpage.length > 0 && nextpage.attr('id') !='details') {
@@ -51,7 +47,7 @@ $(function() {
 
 		}
 	});
-	
+	*/
 			
 			
 	
