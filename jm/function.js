@@ -2,6 +2,23 @@
            // $.support.cors = true; // force cross-site scripting (as of jQuery 1.5)
             $.mobile.allowCrossDomainPages = true;
         });
+		$(document).ready(function () {
+    	
+ 
+    $(window).scroll(function () {
+        // Start loading when 200px from the bottom
+		
+        if ($(window).scrollTop() + $(window).height() > $('#news').height() - 100 && !isLoading) {
+          
+		   if(urlnews!=null){
+			ajaxNews();
+		   }else{
+			   
+		   	$('#loading').html('<h2 style="color:blue;">Aucune données à télécharger</h2>');
+		   }
+        }
+    });
+});
 $(function() {
 	//$.mobile.page.prototype.options.domCache = true;
 	//active = $.mobile.activePage.attr('id')+'.html';
@@ -10,9 +27,12 @@ $(function() {
     width  : $(window).width(),
     height : $(window).height()
 	};
+	var next ="";
+	urlnews = "https://outils.vn.auf.org/news/api/?page=1";
+	isLoading = false;
 	ajaxNews();
 	ajaxSA();
-   $(document).on('click','#news ul li a', function () {
+   $(document).on('click','#news ul li ', function () {
            
 		    siteweb = $(this).attr('data-title');
 			frame ='<IFRAME id="frameId" src="'+siteweb+'" width="100%"  scrolling=auto frameborder=1 > </IFRAME>';
@@ -52,7 +72,9 @@ $(function() {
 			
 	
 });
+
 function ajaxSA(){
+	isLoading = true;
 	var url = 'https://outils.vn.auf.org/veille/api_sa/?format=jsonp';
 	 $.ajax({
 		type: 'GET',
@@ -83,6 +105,7 @@ function ajaxSA(){
 			}
 				 resultat+='</div>';
     		$('#systemeinfos').html(resultat);
+			isLoading = false;
 
 		},
 		error: function (responseData, textStatus, errorThrown) {
@@ -91,34 +114,41 @@ function ajaxSA(){
 		}
 		});
 }
+
 function ajaxNews(){
-	 var  url = "https://outils.vn.auf.org/news/api/?format=jsonp";
+	
+	isLoading = true;
+	$("#loading").show();
+	// url = urlnews+'&format=jsonp';	 
 	 
 	 $.ajax({
-				type: 'GET',
-				dataType: "jsonp",
-				url: url,
-				crossDomain: true,
-				jsonp: 'callback', 
-				cache: false,
-				success: function (responseData, textStatus, jqXHR) {			
-						
-						var resultat ='<ul data-role="listview" data-inset="true" class="listnews">';
-						var data = responseData.results;
-						for(i=0;i<data.length;i++ ){
-					 		
-							resultat+= '<li><a href="#"  data-title="'+data[i].lien_vers_site+'" data-ajax="false"><img src="'+racine+data[i].images+'"> <h2>'+data[i].titre+'</h2><p >'+data[i].extrait_contenu.substring(80,-1)+'</p></a> </li>';
-						
-						
-						}
-							resultat+='</ul>';
-						// $("[data-role='listview']").html(resultat);
-						 $("#news").html(resultat).find("ul").addClass('listnews');
-						
-				},
-				error: function (responseData, textStatus, errorThrown) {
-						
-					 alert('POST failed.'+errorThrown);
-				}
-				});
+		type: 'GET',
+		dataType: "jsonp",
+		url: urlnews,
+		crossDomain: true,
+		jsonp: 'callback', 
+		cache: false,
+		success: function (responseData, textStatus, jqXHR) {			
+				
+			var resultat ='';
+			var data = responseData.results;
+			urlnews =  responseData.next;
+			
+			for(i=0;i<data.length;i++ ){
+				
+				resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false"><img src="'+racine+data[i].images+'"> <h2>'+data[i].titre+'</h2><p >'+data[i].extrait_contenu.substring(80,-1)+'</p></a> </li>';
+			
+			
+			}
+			
+			// $("[data-role='listview']").html(resultat);
+			 $("#loading").hide();
+			 $("#listnews").append(resultat).addClass('listnews');
+			isLoading = false;
+		},
+		error: function (responseData, textStatus, errorThrown) {
+				
+			 alert('POST failed.'+errorThrown);
+		}
+		});
 }
