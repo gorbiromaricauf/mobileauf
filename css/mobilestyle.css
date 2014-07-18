@@ -24,45 +24,55 @@ ul.listnews {
 ul.listnews li{
 	height:120px;
 	list-style:none;
+	white-space:normal;
 		
 }
+
 ul.listnews li:nth-child(2n+1){
-	background-color:#7bb43b;	
+	background-color:#009;	
 		
 }
 ul.listnews li:nth-child(2n+2){
 	background-color:#663399;	
 		
 }
-
+ul.listnews li:nth-child(2n+1) a h2{
+	/*color:#03F;	
+	font-weight:bold;*/
+		
+}
 ul.listnews li a{
 	text-decoration:none;
 	font-weight:normal;
+	
 	
 }
 ul.listnews li a img{
 	
 	width:25%;
-	height:120px;
+	height:100%;
 	float:left;
 	padding-right:10px;
 	
 }
 ul.listnews li a h2{
-	font-size:14px;
+	font-size:13px;
 	font-weight:bold;
 	padding-top:5px;
 	color:#FFFFFF;
 	text-shadow: none;
+	color:#FF0;
+	white-space:normal;
 	
 }
 ul.listnews li a p{
-	font-size:14px;
+	font-size:12px;
 	color:#fff;
 	
 	font-weight:normal;
 	font-family:"Times New Roman", Times, serif;
 	text-shadow: none;
+	white-space:normal;
 		
 }
 #loading h2{
