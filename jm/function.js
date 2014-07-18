@@ -1,25 +1,18 @@
- $(document).bind("mobileinit", function () {
-           // $.support.cors = true; // force cross-site scripting (as of jQuery 1.5)
-            $.mobile.allowCrossDomainPages = true;
-        });
-		$(document).ready(function () {
-    	
  
-    $(window).scroll(function () {
-        // Start loading when 200px from the bottom
-		
-        if ($(window).scrollTop() + $(window).height() > $('#news').height() - 100 && !isLoading) {
-          
-		   if(urlnews!=null){
-			ajaxNews();
-		   }else{
-			   
-		   	$('#loading').html('<h2 style="color:blue;">Aucune données à télécharger</h2>');
-		   }
-        }
-    });
-});
 $(function() {
+	$(window).scroll(function () {
+			// Start loading when 200px from the bottom
+			
+			if ($(window).scrollTop() + $(window).height() > $('#news').height() - 100 && !isLoading) {
+			  
+			   if(urlnews!=null){
+				ajaxNews();
+			   }else{
+				   
+				$('#loading').html('<h2 >Aucune données à télécharger</h2>');
+			   }
+			}
+		});
 	//$.mobile.page.prototype.options.domCache = true;
 	//active = $.mobile.activePage.attr('id')+'.html';
 	racine ="http://outils.vn.auf.org/media/";	
@@ -27,7 +20,7 @@ $(function() {
     width  : $(window).width(),
     height : $(window).height()
 	};
-	var next ="";
+	
 	urlnews = "https://outils.vn.auf.org/news/api/?page=1";
 	isLoading = false;
 	ajaxNews();
@@ -74,7 +67,7 @@ $(function() {
 });
 
 function ajaxSA(){
-	isLoading = true;
+	
 	var url = 'https://outils.vn.auf.org/veille/api_sa/?format=jsonp';
 	 $.ajax({
 		type: 'GET',
@@ -87,7 +80,7 @@ function ajaxSA(){
 				
 		
 			var data = responseData.results;
-			var resultat = '<div data-role="tabs" id="tabs"><div data-role="navbar"  style="position:fixed;width:95%;z-index:10000;height:80px;"><ul>';
+			var resultat = '<div data-role="tabs" id="tabs"><div data-role="navbar" data-position="fixed" style="position:fixed;width:95%;z-index:10000;height:80px;top:43px;"><ul>';
 			for(i=0;i<data.length;i++ ){
 				resultat +='<li><a href="#pays'+data[i].id+'" >'+data[i].pays+'</a></li>';
 			
@@ -96,7 +89,7 @@ function ajaxSA(){
 					
 			resultat+='</ul>  </div>';
   			for(i=0;i<data.length;i++ ){
-				resultat+='<div id="pays'+data[i].id+'" class="ui-body-d ui-content " style="top:100px;height:device-height;overflow:auto;-webkit-overflow-scrolling: touch;">';
+				resultat+='<div id="pays'+data[i].id+'" class="ui-body-d ui-content " style="top:50px;overflow:auto;-webkit-overflow-scrolling: touch;">';
 					resultat+='<h2>'+data[i].pays+'</h2>';
 					resultat+= data[i].contenu_mobile;
  				 resultat+='</div>';
@@ -105,7 +98,7 @@ function ajaxSA(){
 			}
 				 resultat+='</div>';
     		$('#systemeinfos').html(resultat);
-			isLoading = false;
+			$('body').find('#systeme').page();
 
 		},
 		error: function (responseData, textStatus, errorThrown) {
