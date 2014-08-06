@@ -109,6 +109,7 @@ function ajaxSA(){
 }
 
 function ajaxNews(){
+	
 	var isRecherche = sessionStorage.recherche;
 	
 	isLoading = true;
@@ -138,16 +139,19 @@ function ajaxNews(){
 			
 			
 			}
+			
 		 $("#loading").hide();
 		
 		 if(isRecherche=='true'){
 			
-			 $("#listnews").html(resultat).addClass('listnews');
+			$("#listnews").html(resultat).addClass('listnews');
+					 
 		 }else{
-		 	
-			$("#listnews").append(resultat).addClass('listnews');
+		 	 $("#listnews").append(resultat).addClass('listnews');
+			
 		 }
 		 isLoading = false;
+		
 		
 		 sessionStorage.urlnews =  responseData.next;
 		 sessionStorage.recherche = false;
@@ -159,8 +163,10 @@ function ajaxNews(){
 		});
 }
 function rechercher(){
-	 recherche = true; 
+	 
 	 sessionStorage.urlnews = 'http://outils.vn.auf.org/news/api/?titre='+$('#searchinput1').val();
 	 sessionStorage.recherche = true;
+	 ajaxNews();
+	 
 	 
 }
