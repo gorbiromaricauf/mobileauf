@@ -67,6 +67,7 @@ $(function() {
 });
 
 function ajaxSA(){
+	
 	var url = 'http://outils.vn.auf.org/veille/api_sa/?format=jsonp';
 
 	 $.ajax({
@@ -77,28 +78,22 @@ function ajaxSA(){
 		jsonp: 'callback', 
 		cache: false,
 		success: function (responseData, textStatus, jqXHR) {			
-				
 		
 			var data = responseData.results;
-			var resultat = '<div data-role="tabs" id="tabs"><div data-role="navbar" data-position="fixed" style="position:fixed;width:95%;z-index:10000;height:80px;top:43px;"><ul>';
-			for(i=0;i<data.length;i++ ){
-				resultat +='<li><a href="#pays'+data[i].id+'" >'+data[i].pays+'</a></li>';
 			
-				
-				}
-					
-			resultat+='</ul>  </div>';
   			for(i=0;i<data.length;i++ ){
-				resultat+='<div id="pays'+data[i].id+'" class="ui-body-d ui-content " style="top:50px;overflow:auto;-webkit-overflow-scrolling: touch;">';
-					resultat+='<h2>'+data[i].pays+'</h2>';
-					resultat+= data[i].contenu_mobile;
- 				 resultat+='</div>';
+				
+				var resultat = '<div> '+data[i].contenu_mobile+'</div>';
+				data[i].pays = data[i].pays.replace(' ','').toLowerCase();
+				
+				$('#systeme_contenu_'+data[i].pays).append(resultat);
+				$('body').find('#systeme_'+data[i].pays).page();
 			
 				
 			}
-				 resultat+='</div>';
-    		$('#systemeinfos').html(resultat);
-			$('body').find('#systeme').page();
+				
+    		//$('#systemeinfos').append(resultat);
+			
 
 		},
 		error: function (responseData, textStatus, errorThrown) {
