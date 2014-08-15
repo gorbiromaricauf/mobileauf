@@ -21,14 +21,7 @@ fieldset > .ui-btn {
     width   : 10%;
     vertical-align : middle;
 }
-@media all and (max-width:480px) {
-    fieldset .ui-input-text {
-        width   : 100%;
-    }
-    fieldset > .ui-btn {
-        width   : 100%;
-    }
-}
+
 
 button{
 text-shadow: none;
@@ -139,3 +132,26 @@ ul.listnews li a p{
         z-index:1002;
         overflow: auto;
     }
+
+@media all and (min-width:380px) {
+	.recherche{
+		display:block;
+		 width   : 100%;
+	}
+	.recherche div{display:inline-block;}
+	.recherche .input-text{
+		 width   : 85%;
+		 text-align:right;
+	}
+    #searchinput1 {
+       
+		 width   : 100%; 
+    }
+	.div-button{
+		 width   : 12%;
+	}
+    .recherche  .ui-btn {
+        
+		display:inline;
+    }
+}

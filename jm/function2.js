@@ -67,8 +67,8 @@ $(function() {
 });
 
 function ajaxSA(){
-	
 	var url = 'http://outils.vn.auf.org/veille/api_sa/?format=jsonp';
+
 	 $.ajax({
 		type: 'GET',
 		dataType: "jsonp",
@@ -119,28 +119,18 @@ function ajaxNews(){
 		sessionStorage.urlnews = "http://outils.vn.auf.org/news/api/?page=1"; 
 	}
 	var url = sessionStorage.urlnews;
+	url = "http://outils.vn.auf.org/news/api/?page=1";
+	var resultat = '';
 	
-	 $.ajax({
-		type: 'GET',
-		dataType: "jsonp",
-		url: url,
-		crossDomain: true,
-		jsonp: 'callback', 
-		cache: false,
-		success: function (responseData, textStatus, jqXHR) {			
+	 $.getJSON(url, function(datas){
+	 	var data =  datas.results;
+		for(i=0;i<data.length;i++ ){
 				
-			var resultat ='';
-			var data = responseData.results;
-			
-			
-			for(i=0;i<data.length;i++ ){
-				
-				resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false"><img src="'+racine+data[i].images+'"> <h2>'+data[i].titre.substring(130,-1)+'</h2><p >'+data[i].extrait_contenu.substring(100,-1)+'</p></a> </li>';
-			
-			
-			}
-			
-		 $("#loading").hide();
+			resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false"><img src="'+racine+data[i].images+'"> <h2>'+data[i].titre.substring(130,-1)+'</h2><p >'+data[i].extrait_contenu.substring(100,-1)+'</p></a> </li>';
+	
+		}
+		
+		$("#loading").hide();
 		
 		 if(isRecherche=='true'){
 			
@@ -154,14 +144,10 @@ function ajaxNews(){
 		 isLoading = false;
 		
 		
-		 sessionStorage.urlnews =  responseData.next;
+		 sessionStorage.urlnews =  datas.next;
 		 sessionStorage.recherche = false;
-		},
-		error: function (responseData, textStatus, errorThrown) {
-				
-			 alert('POST failed.'+errorThrown);
-		}
-		});
+	 });
+	
 }
 function rechercher(){
 	 
