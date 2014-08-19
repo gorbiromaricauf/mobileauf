@@ -83,6 +83,7 @@ ul.listnews li a img{
 	padding-right:10px;
 	
 }
+
 ul.listnews li a h2{
 	font-size:13px;
 	font-weight:bold;
@@ -132,9 +133,7 @@ ul.listnews li a p{
         z-index:1002;
         overflow: auto;
     }
-
-@media all and (min-width:380px) {
-	.recherche{
+.recherche{
 		display:block;
 		 width   : 100%;
 	}
@@ -154,4 +153,14 @@ ul.listnews li a p{
         
 		display:inline;
     }
+@media all and (min-width:480px) {
+	
+	ul.listnews li a img{
+	
+		width:120px;
+		height:120px;
+		float:left;
+		padding-right:10px;
+	
+	}
 }

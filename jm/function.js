@@ -41,7 +41,7 @@ $(function() {
 	isLoading = false;
 	ajaxNews();
 	ajaxSA();
-   $(document).on('click','#news ul li ', function () {
+   $(document).on('tap','#news ul li ', function () {
            
 		siteweb = $(this).attr('data-title');
 		frame ='<IFRAME id="frameId" src="'+siteweb+'" width="100%"  scrolling=auto frameborder=1 > </IFRAME>';
@@ -56,19 +56,44 @@ $(function() {
 		$('body').find('#details').page();
 						
     });   
-		  $(document).on('click','.index', function () {
+		  $(document).on('tap','.index', function () {
            	if(sessionStorage.urlnews =='null'){
 				sessionStorage.recherche = 	true; 
 			}
 			ajaxNews();
 		
         });   
+	 $('#enregistrer_repertoire').bind( "tap", add_membre );	
+	function add_membre(){alert('fr');
+		/*$.post( "http://outils.vn.auf.org/veille/add-membres/", { name: "John", time: "2pm" } )
+			.done(function( data ) {
+   		 alert( "Data Loaded: " + data );
+  		});*/
+		$.ajax({
+		  type:'POST',
+		  
+		  
+		  url: "http://outils.vn.auf.org/veille/add-membres/",
+		  data: JSON.stringify({"nom":"Gor bi","prenom":"Romaric the one","email":"test@yahoo.com"}),
+		 
+		  contentType: "application/json; charset=utf-8",	  
+		 success: function (responseData, textStatus, jqXHR) {			
+		
+			alert(responseData.toString());
+		},
+		error: function (responseData, textStatus, errorThrown) {
+				
+			 alert('POST failed.'+errorThrown+ textStatus);
+		}
+		});
+	}
 	
 });
 
 function ajaxSA(){
 	
 	var url = 'http://outils.vn.auf.org/veille/api_sa/?format=jsonp';
+
 	 $.ajax({
 		type: 'GET',
 		dataType: "jsonp",
@@ -77,28 +102,21 @@ function ajaxSA(){
 		jsonp: 'callback', 
 		cache: false,
 		success: function (responseData, textStatus, jqXHR) {			
-				
 		
 			var data = responseData.results;
-			var resultat = '<div data-role="tabs" id="tabs"><div data-role="navbar" data-position="fixed" style="position:fixed;width:95%;z-index:10000;height:80px;top:43px;"><ul>';
-			for(i=0;i<data.length;i++ ){
-				resultat +='<li><a href="#pays'+data[i].id+'" >'+data[i].pays+'</a></li>';
 			
-				
-				}
-					
-			resultat+='</ul>  </div>';
   			for(i=0;i<data.length;i++ ){
-				resultat+='<div id="pays'+data[i].id+'" class="ui-body-d ui-content " style="top:50px;overflow:auto;-webkit-overflow-scrolling: touch;">';
-					resultat+='<h2>'+data[i].pays+'</h2>';
-					resultat+= data[i].contenu_mobile;
- 				 resultat+='</div>';
+				
+				var resultat = '<div> '+data[i].contenu_mobile+'</div>';
+				data[i].pays = data[i].pays.replace(' ','').toLowerCase();
+				
+				$('#systeme_contenu_'+data[i].pays).append(resultat);
+				$('body').find('#systeme_'+data[i].pays).page();
 			
 				
 			}
-				 resultat+='</div>';
-    		$('#systemeinfos').html(resultat);
-			$('body').find('#systeme').page();
+				
+			
 
 		},
 		error: function (responseData, textStatus, errorThrown) {
@@ -119,28 +137,18 @@ function ajaxNews(){
 		sessionStorage.urlnews = "http://outils.vn.auf.org/news/api/?page=1"; 
 	}
 	var url = sessionStorage.urlnews;
+	url = "http://outils.vn.auf.org/news/api/?page=1";
+	var resultat = '';
 	
-	 $.ajax({
-		type: 'GET',
-		dataType: "jsonp",
-		url: url,
-		crossDomain: true,
-		jsonp: 'callback', 
-		cache: false,
-		success: function (responseData, textStatus, jqXHR) {			
+	 $.getJSON(url, function(datas){
+	 	var data =  datas.results;
+		for(i=0;i<data.length;i++ ){
 				
-			var resultat ='';
-			var data = responseData.results;
-			
-			
-			for(i=0;i<data.length;i++ ){
-				
-				resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false"><img src="'+racine+data[i].images+'"> <h2>'+data[i].titre.substring(130,-1)+'</h2><p >'+data[i].extrait_contenu.substring(100,-1)+'</p></a> </li>';
-			
-			
-			}
-			
-		 $("#loading").hide();
+			resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false"><img src="'+racine+data[i].images+'"> <h2>'+data[i].titre.substring(130,-1)+'</h2><p >'+data[i].extrait_contenu.substring(100,-1)+'</p></a> </li>';
+	
+		}
+		
+		$("#loading").hide();
 		
 		 if(isRecherche=='true'){
 			
@@ -154,20 +162,15 @@ function ajaxNews(){
 		 isLoading = false;
 		
 		
-		 sessionStorage.urlnews =  responseData.next;
+		 sessionStorage.urlnews =  datas.next;
 		 sessionStorage.recherche = false;
-		},
-		error: function (responseData, textStatus, errorThrown) {
-				
-			 alert('POST failed.'+errorThrown);
-		}
-		});
+	 });
+	
 }
 function rechercher(){
 	 
 	 sessionStorage.urlnews = 'http://outils.vn.auf.org/news/api/?titre='+$('#searchinput1').val();
 	 sessionStorage.recherche = true;
 	 ajaxNews();
-	 
-	 
+	 	 
 }
