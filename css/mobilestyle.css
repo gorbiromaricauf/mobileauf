@@ -21,7 +21,9 @@ fieldset > .ui-btn {
     width   : 10%;
     vertical-align : middle;
 }
-
+.pour_grand_ecran{
+	display:none;
+}
 
 button{
 text-shadow: none;
@@ -50,7 +52,7 @@ ul.listnews {
 	
 }
 ul.listnews li{
-	height:120px;
+	height:80px;
 	list-style:none;
 	white-space:normal;
 		
@@ -75,12 +77,12 @@ ul.listnews li a{
 	
 	
 }
-ul.listnews li a img{
+ul.listnews li a img,ul.listnews li a div {
 	
 	width:80px;
 	height:80px;
 	float:left;
-	padding-right:10px;
+	padding-right:5px;
 	
 }
 
@@ -102,6 +104,7 @@ ul.listnews li a p{
 	font-family:"Times New Roman", Times, serif;
 	text-shadow: none;
 	white-space:normal;
+	display:none;
 		
 }
 #loading h3{
@@ -153,9 +156,17 @@ ul.listnews li a p{
         
 		display:inline;
     }
+	ul.listnews li a h2.pour_grand_ecran{
+	display:none;
+}
 @media all and (min-width:480px) {
-	
-	ul.listnews li a img{
+	ul.listnews li{
+	height:120px;
+	list-style:none;
+	white-space:normal;
+		
+}
+	ul.listnews li a img,ul.listnews li a div {
 	
 		width:120px;
 		height:120px;
@@ -163,4 +174,20 @@ ul.listnews li a p{
 		padding-right:10px;
 	
 	}
+	ul.listnews li a p{
+	font-size:12px;
+	color:#fff;	
+	font-weight:normal;
+	font-family:"Times New Roman", Times, serif;
+	text-shadow: none;
+	white-space:normal;
+	display:block;
+		
+}
+ul.listnews li a h2{
+	display:none;
+}
+ul.listnews li a h2.pour_grand_ecran{
+	display:block;
+}
 }

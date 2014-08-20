@@ -1,5 +1,6 @@
  
 $(function() {
+	
 	racine ="http://outils.vn.auf.org/media/";
 	if(typeof(Storage) !== "undefined") {
    		 if(typeof(sessionStorage.recherche) == "undefined"){
@@ -56,11 +57,12 @@ $(function() {
 		$('body').find('#details').page();
 						
     });   
-		  $(document).on('tap','.index', function () {
+		  $(document).on('tap','.test1 li', function () {
            	if(sessionStorage.urlnews =='null'){
 				sessionStorage.recherche = 	true; 
 			}
 			ajaxNews();
+			ajaxSA()
 		
         });   
 	 $('#enregistrer_repertoire').bind( "tap", add_membre );	
@@ -98,6 +100,7 @@ function ajaxSA(){
 		type: 'GET',
 		dataType: "jsonp",
 		url: url,
+		timeout:30000 ,
 		crossDomain: true,
 		jsonp: 'callback', 
 		cache: false,
@@ -110,7 +113,7 @@ function ajaxSA(){
 				var resultat = '<div> '+data[i].contenu_mobile+'</div>';
 				data[i].pays = data[i].pays.replace(' ','').toLowerCase();
 				
-				$('#systeme_contenu_'+data[i].pays).append(resultat);
+				$('#systeme_contenu_'+data[i].pays).html(resultat);
 				$('body').find('#systeme_'+data[i].pays).page();
 			
 				
@@ -121,30 +124,39 @@ function ajaxSA(){
 		},
 		error: function (responseData, textStatus, errorThrown) {
 				
-			 alert('POST failed.'+errorThrown);
+			if(textStatus == 'timeout')
+			{     
+				alert('Vérifiez votre connexion internet'); 
+				//do something. Try again perhaps?
+			}
 		}
 		});
 }
 
 function ajaxNews(){
 	
-	var isRecherche = sessionStorage.recherche;
+	
 	
 	isLoading = true;
 	$("#loading").show();
 	// url = urlnews+'&format=jsonp';	
 	if(sessionStorage.urlnews =='null'){
 		sessionStorage.urlnews = "http://outils.vn.auf.org/news/api/?page=1"; 
+		sessionStorage.recherche = true;
 	}
 	var url = sessionStorage.urlnews;
-	url = "http://outils.vn.auf.org/news/api/?page=1";
+	var isRecherche = sessionStorage.recherche;
 	var resultat = '';
 	
 	 $.getJSON(url, function(datas){
 	 	var data =  datas.results;
 		for(i=0;i<data.length;i++ ){
-				
-			resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false"><img src="'+racine+data[i].images+'"> <h2>'+data[i].titre.substring(130,-1)+'</h2><p >'+data[i].extrait_contenu.substring(100,-1)+'</p></a> </li>';
+			extrait = data[i].extrait_contenu.split(' ',20);
+			extrait = extrait.join(' ');
+			titre = data[i].titre.split(' ',20);
+			titre = titre.join(' ');
+			if(data[i].images!=''){var img = '<img src="'+racine+data[i].images+'">';}else{var img ='<div > &nbsp;</div>';}
+			resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false">'+img+' <h2>'+titre+'</h2><h2 class="pour_grand_ecran">'+data[i].titre+'</h2><p >'+extrait+'</p></a> </li>';
 	
 		}
 		
@@ -159,9 +171,7 @@ function ajaxNews(){
 			$("#listnews").append(resultat).listview();
 			
 		 }
-		 isLoading = false;
-		
-		
+		 isLoading = false;		
 		 sessionStorage.urlnews =  datas.next;
 		 sessionStorage.recherche = false;
 	 });
