@@ -1,47 +1,113 @@
  
 $(function() {
-	
+	/*$('.pdfview').each (function(i) {
+    $(this)
+    $(this).replaceWith('<h2><a href="'+$(this).attr('href')+'">'+$(this).text()+'</a></h2><iframe src="http://docs.google.com/viewer?url='+$(this).attr('href')+'&#038;embedded=true" width="500" height="250" style="border: none;"></iframe>');
+});*/
+	 $( "#mention_legal" ).enhanceWithin().popup();
 	racine ="http://outils.vn.auf.org/media/";
 	if(typeof(Storage) !== "undefined") {
    		 if(typeof(sessionStorage.recherche) == "undefined"){
+			//Quand user clique sur le bouton recherche , recherche = true
 		 	sessionStorage.recherche = false;
 		 }
 		 
 		 if(typeof(sessionStorage.urlnews) == "undefined" || (sessionStorage.urlnews == 'null') ){
-		 	sessionStorage.urlnews = "http://outils.vn.auf.org/news/api/?page=1";
+		 	sessionStorage.urlnews = "http://outils.vn.auf.org/news/api/?categorie=2&page=1&statut=Publié&ordering=-date_debut";
+		 }
+
+		 if(typeof(sessionStorage.urlagenda) == "undefined" || (sessionStorage.urlagenda == 'null') ){
+		 	sessionStorage.urlagenda = "http://outils.vn.auf.org/news/api/?categorie=5&page=1&statut=Publié&ordering=-date_debut";
 		 }
 		 
-		 if(typeof(localStorage.premierefois)=="undefined"){
+		 if(typeof(sessionStorage.urlappel) == "undefined" || (sessionStorage.urlappel == 'null') ){
+		 	sessionStorage.urlappel = "http://outils.vn.auf.org/news/api/?categorie=6&page=1&statut=Publié&ordering=-date_fin";
+		 }	
+	 
+		 
+		/* if(typeof(localStorage.premierefois)=="undefined"){
 		 	localStorage.premierefois = true;
 			document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block';
-		 }
+		 }*/
 	} else {
    		 alert('Votre navigateur ne supporte pas les coockies');
 	}
+	// code insertion entete, bouton légale et logo
+	$('[data-role="header"]').prepend('	<a href="#mention_legal" data-icon="grid" data-rel="popup" class="ui-btn-right ui-btn ui-icon-grid  ui-corner-all ui-btn-icon-notext" data-iconpos="right" data-transition="pop"></a><div id=""><div class="logo"><img src="images/logo.png" />	</div></div> ');
+	
+	
+	// code insertion popup
+	//$('[data-role="page"]').prepend(legal).page();
+	$(document).on("scrollstop",function(){
+		page = $.mobile.activePage.attr("id");
+		//alert(page);
+		if (page == "agenda"){
+			//alert($(document).scrollTop() + " " + $(document).height() + " " + $('#agenda').height());
+			if ( $(window).scrollTop() + $(window).height() > $('#agenda').height() - 180 && !isLoading) {
+			   //alert("go 11");
+			   if(sessionStorage.urlagenda!='null'){
+				ajaxNews(5); //get Agenda
+			   }else{
+				//$('#loadingagenda').html('<h2 >Aucune données à télécharger</h2>');
+			   }
+			}		
+		}else 	if (page == "appel"){
+			//alert($(window).scrollTop() + " " + $(window).height() + " " + $('#appel').height());
+			//alert(typeof(sessionStorage.urlagenda) + " " + sessionStorage.urlagenda);
+			if ($(window).scrollTop() + $(window).height() > $('#appel').height() - 180 && !isLoading) {
+				//alert("go 11");
+			   if(sessionStorage.urlappel!='null'){
+				ajaxNews(6); //get Appel
+			   }else{
+				//$('#loadingappel').html('<h2 >Aucune données à télécharger</h2>');
+			   }
+			}		
+		} else 	if (page == "index"){
+			//alert($('#news').height() + ' - ' + $(window).scrollTop() + ' - ' +  $(window).height());
+			if ($(window).scrollTop() + $(window).height() > $('#news').height() - 100 && !isLoading ) {
+			
+			  	sessionStorage.recherche = false;
+				
+			   if(sessionStorage.urlnews!='null'){
+				ajaxNews(2); //get News
+			   }else{
+				   
+				//$('#loading').html('<h2 >Aucune données à télécharger</h2>');
+			   }
+			}		
+		}
+	});
+	/*
 	
 	$(window).scroll(function () {
 			// Start loading when 200px from the bottom
+			//alert($.mobile.activePage.attr("id"));
 			
 			if ($(window).scrollTop() + $(window).height() > $('#news').height() - 100 && !isLoading) {
 			  	sessionStorage.recherche = false;
 				
 			   if(sessionStorage.urlnews!='null'){
-				
-				ajaxNews();
+				ajaxNews(2); //get News
 			   }else{
 				   
 				$('#loading').html('<h2 >Aucune données à télécharger</h2>');
 			   }
 			}
 		});
+		*/
 
 	var viewport = {
-    width  : $(window).width(),
-    height : $(window).height()
+	    width  : $(window).width(),
+	    height : $(window).height()
 	};
+	
+	
 	isLoading = false;
-	ajaxNews();
+	//ajaxInit(2);
+	ajaxNews(2);	ajaxNews(5);	ajaxNews(6);
 	ajaxSA();
+	
+	
    $(document).on('tap','#news ul li ', function () {
            
 		siteweb = $(this).attr('data-title');
@@ -57,38 +123,52 @@ $(function() {
 		$('body').find('#details').page();
 						
     });   
-		  $(document).on('tap','.test1 li', function () {
+    
+      $(document).on('tap','#agenda ul li ', function () {
+           
+		siteweb = $(this).attr('data-title');
+		frame ='<IFRAME id="frameId" src="'+siteweb+'" width="100%"  scrolling=auto frameborder=1 > </IFRAME>';
+		theframe = $(frame);
+		//theframe.appendTo($("#contenusite"));		
+		$("#contenusite").html(theframe);
+		$.mobile.initializePage();		
+		$.mobile.changePage('#details', "up", true, true);
+		$("#frameId").load(function() {
+			$(this).height( viewport.height );
+		});
+		$('body').find('#details').page();
+						
+    });   
+    
+    $(document).on('tap','#appel ul li ', function () {
+           
+		siteweb = $(this).attr('data-title');
+		frame ='<IFRAME id="frameId" src="'+siteweb+'" width="100%"  scrolling=auto frameborder=1 > </IFRAME>';
+		theframe = $(frame);
+		//theframe.appendTo($("#contenusite"));		
+		$("#contenusite").html(theframe);
+		$.mobile.initializePage();		
+		$.mobile.changePage('#details', "up", true, true);
+		$("#frameId").load(function() {
+			$(this).height( viewport.height );
+		});
+		$('body').find('#details').page();
+						
+    });       
+    
+    /*
+   $(document).on('tap','.test1 li', function () {
            	if(sessionStorage.urlnews =='null'){
-				sessionStorage.recherche = 	true; 
+				sessionStorage.recherche = true; 
 			}
-			ajaxNews();
-			ajaxSA()
+			ajaxNews(2);
+			ajaxSA();
 		
         });   
-	 $('#enregistrer_repertoire').bind( "tap", add_membre );	
-	function add_membre(){alert('fr');
-		/*$.post( "http://outils.vn.auf.org/veille/add-membres/", { name: "John", time: "2pm" } )
-			.done(function( data ) {
-   		 alert( "Data Loaded: " + data );
-  		});*/
-		$.ajax({
-		  type:'POST',
-		  
-		  
-		  url: "http://outils.vn.auf.org/veille/add-membres/",
-		  data: JSON.stringify({"nom":"Gor bi","prenom":"Romaric the one","email":"test@yahoo.com"}),
-		 
-		  contentType: "application/json; charset=utf-8",	  
-		 success: function (responseData, textStatus, jqXHR) {			
-		
-			alert(responseData.toString());
-		},
-		error: function (responseData, textStatus, errorThrown) {
-				
-			 alert('POST failed.'+errorThrown+ textStatus);
-		}
-		});
-	}
+	*/
+	 
+   $('#enregistrer_repertoire').bind( "tap", add_membre );	
+  
 	
 });
 
@@ -133,18 +213,38 @@ function ajaxSA(){
 		});
 }
 
-function ajaxNews(){
-	
-	
+function ajaxInit(categorieID){
 	
 	isLoading = true;
-	$("#loading").show();
+	//$("#loading").show();
 	// url = urlnews+'&format=jsonp';	
-	if(sessionStorage.urlnews =='null'){
-		sessionStorage.urlnews = "http://outils.vn.auf.org/news/api/?page=1"; 
-		sessionStorage.recherche = true;
-	}
 	var url = sessionStorage.urlnews;
+	url = "";
+	if (categorieID==2){  //news	
+		$("#loading").show();
+		if((sessionStorage.urlnews =='null')){
+			sessionStorage.urlnews = "http://outils.vn.auf.org/news/api/?ordering=-date_debut&statut=Publié&categorie=" + categorieID + "&page=1"; 
+		}
+		url = sessionStorage.urlnews;
+	}
+	
+	if (categorieID==5){
+		$("#loadingagenda").show();
+		if((sessionStorage.urlagenda =='null')){
+			sessionStorage.urlagenda = "http://outils.vn.auf.org/news/api/?ordering=-date_debut&statut=Publié&categorie=" + categorieID + "&page=1"; 
+		}
+		url = sessionStorage.urlagenda;
+	}
+	
+	if (categorieID==6){
+		$("#loadingappel").show();
+		if((sessionStorage.urlappel =='null')){
+			sessionStorage.urlappel = "http://outils.vn.auf.org/news/api/?ordering=-date_fin&statut=Publié&categorie=" + categorieID + "&page=1"; 
+			
+		}
+		url = sessionStorage.urlappel;
+	}
+	
 	var isRecherche = sessionStorage.recherche;
 	var resultat = '';
 	
@@ -155,32 +255,152 @@ function ajaxNews(){
 			extrait = extrait.join(' ');
 			titre = data[i].titre.split(' ',20);
 			titre = titre.join(' ');
-			if(data[i].images!=''){var img = '<img src="'+racine+data[i].images+'">';}else{var img ='<div > &nbsp;</div>';}
-			resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false">'+img+' <h2>'+titre+'</h2><h2 class="pour_grand_ecran">'+data[i].titre+'</h2><p >'+extrait+'</p></a> </li>';
+			
+			if (categorieID==2){ //actulites
+				if(data[i].images!=''){var img = '<img src="'+racine+data[i].images+'">';}else{var img ='<div > &nbsp;</div>';}
+				resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false">'+img+' <h2>'+titre+'</h2><h2 class="pour_grand_ecran">'+data[i].titre+'</h2><p >'+extrait+'</p></a> </li>';
+
+			}else if (categorieID==5){ //Agenda
+				resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false">'+' <h2>'+titre+'</h2><h2 class="pour_grand_ecran">'+data[i].titre+'</h2><p >'+data[i].date_debut.substring(8,10)+ '-' +data[i].date_debut.substring(5,7)+ '-' + +data[i].date_debut.substring(0,4)+ '</p></a> </li>';
+
+			}else if (categorieID==6){ //Appel d'offre
+				resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false">'+' <h2>'+titre+'</h2><h2 class="pour_grand_ecran">'+data[i].titre+'</h2><p >Date limite : '+data[i].date_fin.substring(8,10)+ '-' +data[i].date_fin.substring(5,7)+ '-' + +data[i].date_fin.substring(0,4)+ '</p></a> </li>';
+			}
 	
 		}
 		
-		$("#loading").hide();
 		
-		 if(isRecherche=='true'){
+		 	// $("#listnews").append(resultat).addClass('listnews');
+			if (categorieID==2){
+				$("#listnews").append(resultat).listview();
+				$("#loading").hide();
+				sessionStorage.urlnews =  datas.next;
+				ajaxInit(5);
+			}else if (categorieID==5){
+				$("#listagenda").append(resultat).listview();
+				$("#loadingagenda").hide();
+				sessionStorage.urlagenda =  datas.next;
+				ajaxInit(6);				
+			}else if (categorieID==6){
+
+				$("#listappel").append(resultat).listview();
+				$("#loadingappel").hide();
+				sessionStorage.urlappel =  datas.next;					
+			}	
+		 isLoading = false;		
+		 sessionStorage.recherche = false;
+	 });
+}
+
+function ajaxNews(categorieID){
+	
+	isLoading = true;
+	//$("#loading").show();
+	// url = urlnews+'&format=jsonp';	
+	var url = sessionStorage.urlnews;
+	url = "";
+	if (categorieID==2){  //news	
+		$("#loading").show();
+		if((sessionStorage.urlnews =='null')){
+			sessionStorage.urlnews = "http://outils.vn.auf.org/news/api/?ordering=-date_debut&statut=Publié&categorie=" + categorieID + "&page=1"; 
+		}
+		url = sessionStorage.urlnews;
+	}
+	
+	if (categorieID==5){
+		$("#loadingagenda").show();
+		if((sessionStorage.urlagenda =='null')){
+			sessionStorage.urlagenda = "http://outils.vn.auf.org/news/api/?ordering=-date_debut&statut=Publié&categorie=" + categorieID + "&page=1"; 
+		}
+		url = sessionStorage.urlagenda;
+	}
+	
+	if (categorieID==6){
+		$("#loadingappel").show();
+		if((sessionStorage.urlappel =='null')){
+			sessionStorage.urlappel = "http://outils.vn.auf.org/news/api/?ordering=-date_fin&statut=Publié&categorie=" + categorieID + "&page=1"; 
+			
+		}
+		url = sessionStorage.urlappel;
+	}
+	
+	var isRecherche = sessionStorage.recherche;
+	var resultat = '';
+	
+	 $.getJSON(url, function(datas){
+	 	var data =  datas.results;
+		for(i=0;i<data.length;i++ ){
+			extrait = data[i].extrait_contenu.split(' ',20);
+			extrait = extrait.join(' ');
+			titre = data[i].titre.split(' ',20);
+			titre = titre.join(' ');
+			
+			if (categorieID==2){ //actulites
+				if(data[i].images!=''){var img = '<img src="'+racine+data[i].images+'">';}else{var img ='<img src="images/ico_news.png">';}
+				resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false">'+img+' <h2>'+titre+'</h2><h2 class="pour_grand_ecran">'+data[i].titre+'</h2><p >'+extrait+'</p></a> </li>';
+
+			}else if (categorieID==5){ //Agenda
+				resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false">'+' <h2>'+titre+'</h2><h2 class="pour_grand_ecran">'+data[i].titre+'</h2><p >'+data[i].date_debut.substring(8,10)+ '-' +data[i].date_debut.substring(5,7)+ '-' + +data[i].date_debut.substring(0,4)+ '</p></a> </li>';
+			}else if (categorieID==6){ //Appel d'offre
+				resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false">'+' <h2>'+titre+'</h2><h2 class="pour_grand_ecran">'+data[i].titre+'</h2><p >Date limite : '+data[i].date_fin.substring(8,10)+ '-' +data[i].date_fin.substring(5,7)+ '-' + +data[i].date_fin.substring(0,4)+ '</p></a> </li>';
+			}
+	
+		}
+		
+		//$("#loading").hide();
+		
+		 if(isRecherche=='true' && categorieID==2){
 			
 		//	$("#listnews").html(resultat).addClass('listnews');
 			$("#listnews").html(resultat).listview();
+			$("#loading").hide();
 		 }else{
 		 	// $("#listnews").append(resultat).addClass('listnews');
-			$("#listnews").append(resultat).listview();
+			if (categorieID==2){
+				$("#loading").hide();
+				sessionStorage.urlnews =  datas.next;
+				$("#listnews").append(resultat).listview();
+
+			}else if (categorieID==5){
+				$("#loadingagenda").hide();
+				$("#listagenda").append(resultat).listview("refresh");
+				//$("#listagenda").append(resultat).listview();
+				sessionStorage.urlagenda =  datas.next;				
+			}else if (categorieID==6){
+				$("#loadingappel").hide();
+				
+				//$("#listappel").append(resultat).addClass('listappel');
+				$("#listappel").append(resultat).listview("refresh");
+				//$("#listappel").listview().listview("refresh");
+				sessionStorage.urlappel =  datas.next;				
+			}	
 			
 		 }
 		 isLoading = false;		
-		 sessionStorage.urlnews =  datas.next;
 		 sessionStorage.recherche = false;
 	 });
 	
 }
+
+
+
 function rechercher(){
 	 
-	 sessionStorage.urlnews = 'http://outils.vn.auf.org/news/api/?titre='+$('#searchinput1').val();
+	 if ($('#searchinput1').val() != ''){
+		sessionStorage.urlnews = 'http://outils.vn.auf.org/news/api/?ordering=-date_debut&statut=Publié&categorie=2&titre='+$('#searchinput1').val();
+	}else{
+		sessionStorage.urlnews = 'http://outils.vn.auf.org/news/api/?ordering=-date_debut&statut=Publié&categorie=2';	
+	}
 	 sessionStorage.recherche = true;
-	 ajaxNews();
-	 	 
+	 ajaxNews(2);
+
+}
+function legal(){
+var legal = '<div data-role="popup" id="mention_legal">';
+				legal += "<h4>Mention légale</h4><p>Ce site est édité par l'Agence universitaire de la Francophonie (AUF), personne morale constituée en vertu de la Loi concernant l'Agence universitaire de la Francophonie (Québec, chapitre A-7.2, entrée en vigueur le 1er novembre 2001). Le contenu du site Web de l’Agence universitaire de la Francophonie (AUF) est partagé à titre d’information générale uniquement. L’AUF et/ou ses représentants ne peuvent en aucun cas être tenus responsables relativement à quelque préjudice, inconvénient et/ou dommage lié directement ou indirectement à la lecture, à la consultation et/ou à l’utilisation du présent site Web et/ou de son contenu. L’AUF et/ou ses représentants ne peuvent en aucun cas être tenus responsables relativement au contenu des sites Web externes pour lesquels et vers lesquels elle offre des liens. Toute commercialisation, directe ou indirecte, de quelque texte contenu dans le présent site Web est strictement interdite. Le présent site Web, et son utilisation par toute personne sont soumis aux lois du Québec et du Canada. Pour tout litige, les juridictions compétentes sont celles de Montréal (Canada-Québec). Toute communication transmise à l'AUF par les visiteurs du présent site est traitée avec la plus stricte confidentialité.";
+			legal += "<br>© AUF - Tous droits réservés.</p></div>";
+var legal = '';
+				legal += "Mention légale : Ce site est édité par l'Agence universitaire de la Francophonie (AUF), personne morale constituée en vertu de la Loi concernant l'Agence universitaire de la Francophonie (Québec, chapitre A-7.2, entrée en vigueur le 1er novembre 2001). Le contenu du site Web de l’Agence universitaire de la Francophonie (AUF) est partagé à titre d’information générale uniquement. L’AUF et/ou ses représentants ne peuvent en aucun cas être tenus responsables relativement à quelque préjudice, inconvénient et/ou dommage lié directement ou indirectement à la lecture, à la consultation et/ou à l’utilisation du présent site Web et/ou de son contenu. L’AUF et/ou ses représentants ne peuvent en aucun cas être tenus responsables relativement au contenu des sites Web externes pour lesquels et vers lesquels elle offre des liens. Toute commercialisation, directe ou indirecte, de quelque texte contenu dans le présent site Web est strictement interdite. Le présent site Web, et son utilisation par toute personne sont soumis aux lois du Québec et du Canada. Pour tout litige, les juridictions compétentes sont celles de Montréal (Canada-Québec). Toute communication transmise à l'AUF par les visiteurs du présent site est traitée avec la plus stricte confidentialité.";
+			legal += "© AUF - Tous droits réservés";
+alert(legal);
 }
