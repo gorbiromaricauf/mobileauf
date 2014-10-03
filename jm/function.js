@@ -6,6 +6,7 @@ $(function() {
 });*/
 	 $( "#mention_legal" ).enhanceWithin().popup();
 	racine ="http://outils.vn.auf.org/media/";
+	
 	if(typeof(Storage) !== "undefined") {
    		 if(typeof(sessionStorage.recherche) == "undefined"){
 			//Quand user clique sur le bouton recherche , recherche = true
@@ -108,7 +109,7 @@ $(function() {
 	ajaxSA();
 	
 	
-   $(document).on('tap','#news ul li ', function () {
+   $(document).on('tap','#listnews li ', function () {
            
 		siteweb = $(this).attr('data-title');
 		frame ='<IFRAME id="frameId" src="'+siteweb+'" width="100%"  scrolling=auto frameborder=1 > </IFRAME>';
@@ -124,7 +125,7 @@ $(function() {
 						
     });   
     
-      $(document).on('tap','#agenda ul li ', function () {
+      $(document).on('tap','#listagenda li ', function () {
            
 		siteweb = $(this).attr('data-title');
 		frame ='<IFRAME id="frameId" src="'+siteweb+'" width="100%"  scrolling=auto frameborder=1 > </IFRAME>';
@@ -140,7 +141,7 @@ $(function() {
 						
     });   
     
-    $(document).on('tap','#appel ul li ', function () {
+    $(document).on('tap','#listappel li ', function () {
            
 		siteweb = $(this).attr('data-title');
 		frame ='<IFRAME id="frameId" src="'+siteweb+'" width="100%"  scrolling=auto frameborder=1 > </IFRAME>';
@@ -293,7 +294,7 @@ function ajaxInit(categorieID){
 }
 
 function ajaxNews(categorieID){
-	
+	root = "http://www.veille.univ-ap.info/news/";
 	isLoading = true;
 	//$("#loading").show();
 	// url = urlnews+'&format=jsonp';	
@@ -337,8 +338,12 @@ function ajaxNews(categorieID){
 			
 			if (categorieID==2){ //actulites
 				if(data[i].images!=''){var img = '<img src="'+racine+data[i].images+'">';}else{var img ='<img src="images/ico_news.png">';}
+				if(data[i].type_news == 1){
+				resultat+= '<li data-title="'+root+data[i].slug+'/"><a href="#"   data-ajax="false">'+img+' <h2>'+titre+'</h2><h2 class="pour_grand_ecran">'+data[i].titre+'</h2><p >'+extrait+'</p></a> </li>';
+				}else{
 				resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false">'+img+' <h2>'+titre+'</h2><h2 class="pour_grand_ecran">'+data[i].titre+'</h2><p >'+extrait+'</p></a> </li>';
 
+				}
 			}else if (categorieID==5){ //Agenda
 				resultat+= '<li data-title="'+data[i].lien_vers_site+'"><a href="#"   data-ajax="false">'+' <h2>'+titre+'</h2><h2 class="pour_grand_ecran">'+data[i].titre+'</h2><p >'+data[i].date_debut.substring(8,10)+ '-' +data[i].date_debut.substring(5,7)+ '-' + +data[i].date_debut.substring(0,4)+ '</p></a> </li>';
 			}else if (categorieID==6){ //Appel d'offre
