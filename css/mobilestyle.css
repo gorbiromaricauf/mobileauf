@@ -50,7 +50,7 @@ input {
     width   : 80%;
     vertical-align : middle;
 }
-#mention_legal p{font-size:10px; text-align:justify;}
+#mention_legal p{font-size:14px; text-align:justify;}
 fieldset >.ui-input-text {
     display : inline-block;
     width   : 80%;
